@@ -6,10 +6,10 @@ from telebot import types
 TOKEN="5732654013:AAEs3Ke5uPUMiZBUk03DitDVVmteGiVENEE"
 bot = telebot.TeleBot(TOKEN)
  
-user = 'postgres'
-password = '1234'
-db_name = 'test'
-host='localhost'
+user = 'tyhloonecfiaho'
+password = 'f683f9a27e5c966798856a1ea102b9b606770583aaf0a6924a800e481e30d57d'
+db_name = 'dap759hhu5uceq'
+host='ec2-54-86-106-48.compute-1.amazonaws.com'
 port = 5432
 rank = "TRAINEE I"
 
