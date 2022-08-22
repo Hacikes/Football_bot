@@ -4,8 +4,10 @@
 
 heroku login #Вводим email и пароль
 heroku create --region eu <habrparserbot>
+  
 OR
-heroku heroku git:remote -a <example-app>
+  
+heroku git:remote -a <example-app>
 heroku buildpacks:set heroku/python
   
 git push heroku master
