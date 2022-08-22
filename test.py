@@ -9,7 +9,7 @@ bot = telebot.TeleBot(TOKEN)
 user = 'tyhloonecfiaho'
 password = 'f683f9a27e5c966798856a1ea102b9b606770583aaf0a6924a800e481e30d57d'
 db_name = 'dap759hhu5uceq'
-host='ec2-54-86-106-48.compute-1.amazonaws.com'
+host='ec2-34-242-8-97.eu-west-1.compute.amazonaws.com'
 port = 5432
 rank = "TRAINEE I"
 
@@ -160,7 +160,7 @@ def handle_text(message):
 def text_handler(message):
     if(message.from_user.first_name == "Артём"):
          bot.send_message(message.chat.id, "Артём, нет")
-         
+
 # Запускаем бота
 bot.polling(none_stop=True, interval=0)
 # cursor.close()
