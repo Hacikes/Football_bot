@@ -29,8 +29,10 @@ class User:
         return self.__tg_name
     def getScope(self):
         return self.__scope
-
-@bot.message_handler(commands=["start"])
+# @bot.message_handler(commands=["start"])
+# def handle_atrem(message):
+#     return
+@bot.message_handler(commands=['start', 'help'])
 def start(message):
     bot.send_message(message.chat.id, 'Я - бот для подсчета вашего футбольного рейтинга \nЯ знаю всего несколько команд:\n /reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
 
@@ -48,8 +50,9 @@ def handle_text(message):
     cursor.close()
 
     #user = User(message.from_user.first_name, 0)
-
-    if (text != "/reg" and text != "/reg@qakickerratingbot") and not results:
+    if message.chat.type == "private":
+        return
+    elif (text != "/reg" and text != "/reg@qakickerratingbot") and not results:
         bot.send_message(chat_id, "Ты даже не зарегался\nНапиши /reg, рак")
     elif text == "/help" or text == "/help@qakickerratingbot":   
         bot.send_message(message.chat.id, '/reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
@@ -64,49 +67,49 @@ def handle_text(message):
             conn.commit()
             cursor.close()
             
-            bot.send_message(chat_id, message.from_user.first_name + ', ты зарегался и сейчас у тебя никакой ранг.\nДумал все так просто будет?')
+            bot.send_message(chat_id, message.from_user.first_name + ', ты зарегался и сейчас у тебя TRAINEE I ранг.\nДумал все так просто будет?')
         else:
             bot.send_message(chat_id, message.from_user.first_name + ', ты уже зарегался')
-    # elif text == "/win" or text == "/win@qakickerratingbot":
-    #     cursor = conn.cursor()
-    #     sqlSEL = "SELECT scope FROM users WHERE tg_name = %s;"
-    #     data = (message.from_user.first_name,)
-    #     cursor.execute(sqlSEL, data)
-    #     user_scope = cursor.fetchall()
-    #     coins = user_scope[0][0]
-    #     coins+=25
+    elif text == "/win" or text == "/win@qakickerratingbot":
+        cursor = conn.cursor()
+        sqlSEL = "SELECT scope FROM users WHERE tg_name = %s;"
+        data = (message.from_user.first_name,)
+        cursor.execute(sqlSEL, data)
+        user_scope = cursor.fetchall()
+        coins = user_scope[0][0]
+        coins+=25
 
-    #     sqlUPD = "UPDATE users SET scope = %s WHERE tg_name = %s;"
-    #     data = (coins, message.from_user.first_name)
-    #     cursor.execute(sqlUPD, data)
+        sqlUPD = "UPDATE users SET scope = %s WHERE tg_name = %s;"
+        data = (coins, message.from_user.first_name)
+        cursor.execute(sqlUPD, data)
         
-    #     conn.commit()
-    #     cursor.close()
+        conn.commit()
+        cursor.close()
 
-    #     bot.send_message(chat_id, 'Хорош, добавляю тебе 25 очков')
-    # elif text == "/lose" or text == "/lose@qakickerratingbot":
-    #     cursor = conn.cursor()
-    #     sqlSEL = "SELECT scope FROM users WHERE tg_name = %s;"
-    #     data = (message.from_user.first_name,)
-    #     cursor.execute(sqlSEL, data)
-    #     user_scope = cursor.fetchall()
-    #     coins = user_scope[0][0]
+        bot.send_message(chat_id, 'Хорош, добавляю тебе 25 очков')
+    elif text == "/lose" or text == "/lose@qakickerratingbot":
+        cursor = conn.cursor()
+        sqlSEL = "SELECT scope FROM users WHERE tg_name = %s;"
+        data = (message.from_user.first_name,)
+        cursor.execute(sqlSEL, data)
+        user_scope = cursor.fetchall()
+        coins = user_scope[0][0]
         
-    #     if(coins==0):
-    #         bot.send_message(message.chat.id, 'Не от чего отнимать рейтинг')
-    #         return
-    #     elif(coins < 25 and coins >= 0):
-    #         coins = 0
-    #     else:
-    #         coins -=25
+        if(coins==0):
+            bot.send_message(message.chat.id, 'Не от чего отнимать рейтинг')
+            return
+        elif(coins < 25 and coins >= 0):
+            coins = 0
+        else:
+            coins -=25
         
-    #     sqlUPD = "UPDATE users SET scope = %s WHERE tg_name = %s;"
-    #     data = (coins, message.from_user.first_name)
-    #     cursor.execute(sqlUPD, data)
-    #     conn.commit()
-    #     cursor.close()
+        sqlUPD = "UPDATE users SET scope = %s WHERE tg_name = %s;"
+        data = (coins, message.from_user.first_name)
+        cursor.execute(sqlUPD, data)
+        conn.commit()
+        cursor.close()
 
-    #     bot.send_message(chat_id, 'Как так можно было? Отнимаю 25 очков')
+        bot.send_message(chat_id, 'Как так можно было? Отнимаю 25 очков')
     elif text == "/mystat" or text == "/mystat@qakickerratingbot": 
         cursor = conn.cursor()
         sqlSEL = "SELECT scope FROM users WHERE tg_name = %s;"
@@ -135,7 +138,7 @@ def handle_text(message):
             
     elif text == "/allstats" or text == "/allstats@qakickerratingbot":
         cursor = conn.cursor()
-        sqlSEL = "SELECT tg_name, scope FROM users"
+        sqlSEL = "SELECT tg_name, scope FROM users ORDER BY scope DESC;"
         cursor.execute(sqlSEL)
         scopes_with_names = cursor.fetchall()
 
@@ -144,14 +147,13 @@ def handle_text(message):
         grades = cursor.fetchall()
         cursor.close()
 
-        j = 0
+        stat = "Рейтинг, среди футболёров: \n"
         for n in scopes_with_names:
             for i in grades:        
                 if i[1] > n[1]:
-                    bot.send_message(chat_id, n[0] + ', ранг - %s. Чего такой маленький?' % i[0])
-                    break
-                else:
-                    j += 1
+                    stat += '\t\t\t' + str(n[0]) + ', ранг - %s, очков - %s.' % (str(i[0]), n[1]) + '\n'
+                    break       
+        bot.send_message(chat_id, stat)
 
 # Запускаем бота
 bot.polling(none_stop=True, interval=0)
