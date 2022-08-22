@@ -32,11 +32,19 @@ class User:
 # @bot.message_handler(commands=["start"])
 # def handle_atrem(message):
 #     return
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, 'Я - бот для подсчета вашего футбольного рейтинга \nЯ знаю всего несколько команд:\n /reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
 
-#@bot.message_handler(content_types=["text"])
+@bot.message_handler(commands=['help'])
+def help(message):
+     bot.send_message(message.chat.id, '/reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
+
+@bot.message_handler(content_types=["text"])
+def text_handler(message):
+    if(message.from_user.first_name == "Артём"):
+         bot.send_message(message.chat.id, "Артём, нет")
+
 @bot.message_handler(regexp="\/\w+[@\w]*")
 def handle_text(message): 
     text = message.text.lower()
@@ -54,8 +62,6 @@ def handle_text(message):
         return
     elif (text != "/reg" and text != "/reg@qakickerratingbot") and not results:
         bot.send_message(chat_id, "Ты даже не зарегался\nНапиши /reg, рак")
-    elif text == "/help" or text == "/help@qakickerratingbot":   
-        bot.send_message(message.chat.id, '/reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
     elif text == "/reg" or text == "/reg@qakickerratingbot":
         if not results:
             cursor = conn.cursor()
