@@ -16,5 +16,7 @@ git push heroku master
 heroku ps:scale bot=1 # запускаем бота
 
 Чтобы выключить бота
+  
 heroku ps:scale bot=0
+  
 heroku ps:stop bot
