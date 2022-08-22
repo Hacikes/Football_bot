@@ -1,6 +1,7 @@
 from collections import defaultdict
 import telebot
 # Создаем экземпляр бота
+# Кирилл рак
 bot = telebot.TeleBot('5732654013:AAEs3Ke5uPUMiZBUk03DitDVVmteGiVENEE')
 user_scores = defaultdict(list)
 user_REGby_messages = defaultdict(list)
