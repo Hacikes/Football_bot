@@ -40,11 +40,6 @@ def start(message):
 def help(message):
      bot.send_message(message.chat.id, '/reg - регистрация на игру\n /win - добавление очков после победы\n /lose - снятие очков после поражения\n /allstats - общая статистика\n /mystat - твоя статистика')
 
-@bot.message_handler(content_types=["text"])
-def text_handler(message):
-    if(message.from_user.first_name == "Артём"):
-         bot.send_message(message.chat.id, "Артём, нет")
-
 @bot.message_handler(regexp="\/\w+[@\w]*")
 def handle_text(message): 
     text = message.text.lower()
@@ -161,6 +156,11 @@ def handle_text(message):
                     break       
         bot.send_message(chat_id, stat)
 
+@bot.message_handler(content_types=["text"])
+def text_handler(message):
+    if(message.from_user.first_name == "Артём"):
+         bot.send_message(message.chat.id, "Артём, нет")
+         
 # Запускаем бота
 bot.polling(none_stop=True, interval=0)
 # cursor.close()
