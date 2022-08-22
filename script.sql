@@ -1,3 +1,20 @@
+CREATE TABLE public.users (
+	tg_name varchar NOT NULL,
+	"scope" int4 NULL,
+	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	upd_time time NULL,
+	CONSTRAINT users_pk PRIMARY KEY (id),
+	CONSTRAINT users_un UNIQUE (tg_name)
+);
+
+CREATE TABLE public.grades (
+	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"name" varchar NOT NULL,
+	max_scope int4 NULL,
+	CONSTRAINT grades_pk PRIMARY KEY (id),
+	CONSTRAINT grades_un UNIQUE (name)
+);
+
 insert into grades (name, max_scope) values ('TRAINEE I',150);
 insert into grades (name, max_scope) values ('TRAINEE II',300);
 insert into grades (name, max_scope) values ('TRAINEE III',450);
