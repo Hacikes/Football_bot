@@ -2,7 +2,7 @@ CREATE TABLE public.users (
 	tg_name varchar NOT NULL,
 	"scope" int4 NULL,
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
-	upd_time time NULL,
+	chat_id int8 NULL,
 	CONSTRAINT users_pk PRIMARY KEY (id),
 	CONSTRAINT users_un UNIQUE (tg_name)
 );
@@ -13,6 +13,17 @@ CREATE TABLE public.grades (
 	max_scope int4 NULL,
 	CONSTRAINT grades_pk PRIMARY KEY (id),
 	CONSTRAINT grades_un UNIQUE (name)
+);
+
+CREATE TABLE public.game_sessions (
+	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	tg_name varchar NULL,
+	win bool NULL,
+	chat_id int4 NULL,
+	last_upd timestamp NULL,
+	game_id int4 NOT NULL,
+	side bool NULL,
+	CONSTRAINT game_sessions_pk PRIMARY KEY (id)
 );
 
 insert into grades (name, max_scope) values ('TRAINEE I',150);
